@@ -1,7 +1,7 @@
 {
   "name": "four-year-grad-rates-by-high-needs",
   "datapackage_version": "1.0-beta.18",
-  "title": "Four-Year-Grad-Rates-by-High-Needs",
+  "title": "Four Year Grad Rates by High Needs",
   "description": "Four-Year Graduation Rate reports 'graduation' counts and rates and 'still enrolled' counts and rates for both graduates and non-graduates, per subgroup.",
   "version": "1.0",
   "licenses": [{
@@ -21,7 +21,7 @@
   }],
   "contributor": [],
   "resources": [{
-    "path": "data/data.csv",
+    "path": "data/four_year_grad_rate_by_high_needs_2011-2015.csv",
     "format": "csv",
     "schema": {
       "fields": [{
@@ -39,11 +39,38 @@
         }, {
           "name": "Measure Type",
           "type": "string",
-          "dimension": true
+          "dimension": true,
+          "constraints": {
+			      "enum": [
+			        "Number",
+		          "Percent"
+		        ]
+			    }
         }, {
           "name": "Variable",
           "type": "string",
-          "dimension": true
+          "dimension": true, 
+          "constraints": {
+		        "enum": [
+		          "Total Cohort Count",
+              "Four Year Graduation Count",
+              "Four Year Graduation Rate",
+              "Still Enrolled After Four Years Count",
+              "Still Enrolled After Four Years Rate",
+              "Other Count",
+              "Other Rate"
+            ]
+			    }
+        }, {
+          "name": "High Needs Status",
+          "type": "string",
+          "dimension": true, 
+            "constraints": {
+		        "enum": [
+              "High Needs", 
+              "Non-High Needs"
+            ]
+			    }			    
         }, {
           "name": "Value",
           "type": "number",
@@ -52,7 +79,7 @@
       }
     }
   ],
-  "last_modified": "03/22/2017",
+  "last_modified": "04/11/2017",
   "ckan_extras": {
     "full_description": {
       "ckan_name": "Full Description",
@@ -71,12 +98,12 @@
     },
     "socrata": {
       "ckan_name": "Socrata",
-      "value": "False",,
+      "value": "False",
       "type": "string"
     },
     "socrata_url": {
       "ckan_name": "Socrata Dataset URL",
-      "value": "",,
+      "value": "",
       "type": "string"
     },
     "domain": {
@@ -102,7 +129,7 @@
     },
     "years_in_catalog": {
       "ckan_name": "Years in Catalog",
-      "value": [],
+      "value": ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2014-2015"],
       "type": "array"
     },
     "latest_year": {
@@ -123,11 +150,114 @@
         "Percent": "%"
       }
     },
-    "default": {}
+    "expected_number_of_geographies": {
+		  "ckan_name": "Expected Number of Unique Geographies",
+		  "value": 205,
+		  "type": "string"
+		},      
+    "default": {      
+      "ckan_name": "Default",
+			"value": {
+				"Measure Type": "Number",
+		 		"District": "Connecticut",
+		 		"Year": ["2014-2015"],
+		 		"Variable": "Total Cohort Count"
+			},
+		  	"type": "object"
+    }  
   },
-  "spot_checks": [],
+  "spot_checks": [  
+    {
+      "type": "$lookup",
+      "filter": {
+        "District": "Bristol School District",
+        "Year": "2010-2011",
+        "Variable": "Total Cohort Count",
+        "High Needs Status": "High Needs",
+        "Measure Type": "Number" 
+      },
+      "expected": {
+        "type": "$match",
+        "number type": "int",
+        "value": 243
+      } 
+    },     
+    {
+      "type": "$lookup",
+      "filter": {
+        "District": "East Hartford School District",
+        "Year": "2011-2012", 
+        "Variable": "Four Year Graduation Rate",
+        "High Needs Status": "Non-High Needs",
+        "Measure Type": "Percent" 
+      },
+      "expected": {
+        "type": "$match",
+        "number type": "float",
+        "value": 92.5
+      } 
+    }, 
+    {
+      "type": "$lookup",
+      "filter": {
+        "District": "Regional School District 01",
+        "Year": "2012-2013", 
+        "Variable": "Still Enrolled After Four Years Count",
+        "High Needs Status": "High Needs",
+        "Measure Type": "Number" 
+      },
+      "expected": {
+        "type": "$match",
+        "number type": "int",
+        "value": -9999
+      } 
+    },     
+    {
+      "type": "$lookup",
+      "filter": {
+        "District": "Unified School District #1",
+        "Year": "2013-2014", 
+        "Variable": "Other Rate",
+        "High Needs Status": "Non-High Needs",
+        "Measure Type": "Percent" 
+      },
+      "expected": {
+        "type": "$match",
+        "number type": "float",
+        "value": -9999
+      } 
+    },  
+    {
+      "type": "$lookup",
+      "filter": {
+        "District": "Wolcott School District",
+        "Year": "2014-2015", 
+        "Variable": "Four Year Graduation Count",
+        "High Needs Status": "High Needs",
+        "Measure Type": "Number" 
+      },
+      "expected": {
+        "type": "$match",
+        "number type": "int",
+        "value": 52
+      } 
+    }
+  ],
   "dimension_groups": [
-    {"Measure Type": []},
-    {"Variable": []}
+    {
+      "High Needs Status": [
+        "High Needs", 
+        "Non-High Needs"    
+      ],
+      "Variable": [
+		    "Total Cohort Count",
+        "Four Year Graduation Count",
+        "Four Year Graduation Rate",
+        "Still Enrolled After Four Years Count",
+        "Still Enrolled After Four Years Rate",
+        "Other Count",
+        "Other Rate"
+      ]      
+    }
   ]
 }
