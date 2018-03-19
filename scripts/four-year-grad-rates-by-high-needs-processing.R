@@ -34,6 +34,11 @@ for (i in 1:length(four_yr_gr_grad_dist_noTrend)) {
   current_file <- current_file[-c(1:3),]
   colnames(current_file) = current_file[1, ]
   current_file = current_file[-1, ] 
+  #Remove "District Code" column if exists
+  dc_col <- grep("Code", colnames(current_file), ignore.case = T, value = T)
+  if (!identical(dc_col, character(0))) {
+    current_file <- current_file[ , -which(names(current_file) == dc_col)]
+  } 
   #Relabel columns
   names(current_file) <- gsub("Still Enrolled", "Still Enrolled After Four Years", names(current_file) )
   names(current_file) <- gsub("Graduation", "Four Year Graduation", names(current_file) )
@@ -53,6 +58,11 @@ for (i in 1:length(four_yr_gr_nongrad_dist_noTrend)) {
   current_file <- current_file[-c(1:3),]
   colnames(current_file) = current_file[1, ]
   current_file = current_file[-1, ] 
+  #Remove "District Code" column if exists
+  dc_col <- grep("Code", colnames(current_file), ignore.case = T, value = T)
+  if (!identical(dc_col, character(0))) {
+    current_file <- current_file[ , -which(names(current_file) == dc_col)]
+  }   
   #Relabel columns
   names(current_file) <- gsub("Still Enrolled", "Still Enrolled After Four Years", names(current_file) )
   names(current_file) <- gsub("Graduation", "Four Year Graduation", names(current_file) )
@@ -72,6 +82,11 @@ for (i in 1:length(four_yr_gr_grad_state_noTrend)) {
   colnames(current_file) = current_file[1, ]
   current_file = current_file[-1, ] 
   rownames(current_file) <- NULL
+  #Remove "District Code" column if exists
+  dc_col <- grep("Code", colnames(current_file), ignore.case = T, value = T)
+  if (!identical(dc_col, character(0))) {
+    current_file <- current_file[ , -which(names(current_file) == dc_col)]
+  } 
   #Relabel columns
   names(current_file) <- gsub("Still Enrolled", "Still Enrolled After Four Years", names(current_file) )
   names(current_file) <- gsub("Graduation", "Four Year Graduation", names(current_file) )
@@ -91,6 +106,11 @@ for (i in 1:length(four_yr_gr_nongrad_state_noTrend)) {
   colnames(current_file) = current_file[1, ]
   current_file = current_file[-1, ] 
   rownames(current_file) <- NULL
+  #Remove "District Code" column if exists
+  dc_col <- grep("Code", colnames(current_file), ignore.case = T, value = T)
+  if (!identical(dc_col, character(0))) {
+    current_file <- current_file[ , -which(names(current_file) == dc_col)]
+  } 
   #Relabel columns
   names(current_file) <- gsub("Still Enrolled", "Still Enrolled After Four Years", names(current_file) )
   names(current_file) <- gsub("Graduation", "Four Year Graduation", names(current_file) )
@@ -134,7 +154,8 @@ years <- c("2010-2011",
            "2011-2012",
            "2012-2013",
            "2013-2014",
-           "2014-2015")
+           "2014-2015", 
+           "2015-2016")
 
 backfill_years <- expand.grid(
   `FixedDistrict` = unique(districts$`FixedDistrict`),
@@ -214,7 +235,7 @@ test2<-test[duplicated(test), ]
 #Write CSV
 write.table(
   complete_four_yr_gr_long,
-  file.path(path_to_top_level, "data", "four_year_grad_rate_by_high_needs_2011-2015.csv"),
+  file.path(path_to_top_level, "data", "four_year_grad_rate_by_high_needs_2011-2016.csv"),
   sep = ",",
   row.names = F
 )
