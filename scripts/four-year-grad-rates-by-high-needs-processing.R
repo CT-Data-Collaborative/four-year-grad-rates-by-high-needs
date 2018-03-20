@@ -224,6 +224,9 @@ complete_four_yr_gr_long$Value[is.na(complete_four_yr_gr_long$Value)] <- -6666
 #recode suppressed data with -9999
 complete_four_yr_gr_long$Value[complete_four_yr_gr_long$Value == "*"]<- -9999
 
+#recode not applicable with -6666
+complete_four_yr_gr_long$Value[complete_four_yr_gr_long$Value == "N/A"]<- -6666
+
 #Order columns
 complete_four_yr_gr_long <- complete_four_yr_gr_long %>% 
   select(`District`, `FIPS`, `Year`, `High Needs Status`, `Variable`, `Measure Type`, `Value`)
