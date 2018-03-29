@@ -161,7 +161,7 @@
 				"Measure Type": "Number",
 		 		"District": "Connecticut",
 		 		"Year": ["2015-2016"],
-		 		"Variable": "Total Cohort Count"
+		 		"Variable": "Four Year Graduation Rate"
 			},
 		  	"type": "object"
     }  
