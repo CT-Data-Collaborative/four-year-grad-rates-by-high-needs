@@ -155,7 +155,8 @@ years <- c("2010-2011",
            "2012-2013",
            "2013-2014",
            "2014-2015", 
-           "2015-2016")
+           "2015-2016", 
+           "2016-2017")
 
 backfill_years <- expand.grid(
   `FixedDistrict` = unique(districts$`FixedDistrict`),
@@ -238,7 +239,7 @@ test2<-test[duplicated(test), ]
 #Write CSV
 write.table(
   complete_four_yr_gr_long,
-  file.path(path_to_top_level, "data", "four_year_grad_rate_by_high_needs_2011-2016.csv"),
+  file.path(path_to_top_level, "data", "four_year_grad_rate_by_high_needs_2011-2017.csv"),
   sep = ",",
   row.names = F
 )
