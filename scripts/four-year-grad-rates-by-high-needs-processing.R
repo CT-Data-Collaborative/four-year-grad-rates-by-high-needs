@@ -177,33 +177,14 @@ complete_four_yr_gr <- complete_four_yr_gr[!with(complete_four_yr_gr, is.na(comp
 #remove duplicated Category rows
 complete_four_yr_gr <- complete_four_yr_gr[!with(complete_four_yr_gr, is.na(complete_four_yr_gr$`High Needs Status`)),]
 
-#Stack category columns
-cols_to_stack <- c("Total Cohort Count",                   
-                   "Four Year Graduation Count",            
-                   "Four Year Graduation Rate",             
-                   "Still Enrolled After Four Years Count",
-                   "Still Enrolled After Four Years Rate",  
-                   "Other Count",                           
-                   "Other Rate")
-
-long_row_count = nrow(complete_four_yr_gr) * length(cols_to_stack)
-
-complete_four_yr_gr_long <- reshape(complete_four_yr_gr,
-                                    varying = cols_to_stack,
-                                    v.names = "Value",
-                                    timevar = "Variable",
-                                    times = cols_to_stack,
-                                    new.row.names = 1:long_row_count,
-                                    direction = "long"
-)
+#wide to long
+complete_four_yr_gr_long <- gather(complete_four_yr_gr, Variable, Value, 4:10)
 
 #Rename FixedDistrict to District
 names(complete_four_yr_gr_long)[names(complete_four_yr_gr_long) == 'FixedDistrict'] <- 'District'
 
-
 #reorder columns and remove ID column
 complete_four_yr_gr_long <- complete_four_yr_gr_long[order(complete_four_yr_gr_long$District, complete_four_yr_gr_long$Year),]
-complete_four_yr_gr_long$id <- NULL
 
 #setup Measure Type column based on Variable column
 complete_four_yr_gr_long$"Measure Type" <- NA
@@ -228,9 +209,12 @@ complete_four_yr_gr_long$Value[complete_four_yr_gr_long$Value == "*"]<- -9999
 #recode not applicable with -6666
 complete_four_yr_gr_long$Value[complete_four_yr_gr_long$Value == "N/A"]<- -6666
 
+complete_four_yr_gr_long$Value <- as.numeric(complete_four_yr_gr_long$Value)
+
 #Order columns
 complete_four_yr_gr_long <- complete_four_yr_gr_long %>% 
-  select(`District`, `FIPS`, `Year`, `High Needs Status`, `Variable`, `Measure Type`, `Value`)
+  select(`District`, `FIPS`, `Year`, `High Needs Status`, `Variable`, `Measure Type`, `Value`) %>% 
+  arrange(desc(Value))
 
 #Use this to find if there are any duplicate entries for a given district
 test <- complete_four_yr_gr_long[,c("District", "Year", "High Needs Status", "Variable")]

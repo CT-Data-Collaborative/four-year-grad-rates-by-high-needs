@@ -168,6 +168,7 @@
     "default": {      
       "ckan_name": "Default",
 			"value": {
+				"Measure Type": "Percent",
 		 		"District": "Connecticut",
 		 		"Year": ["2016-2017"],
 		 		"Variable": "Four Year Graduation Rate"
